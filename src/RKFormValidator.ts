@@ -1,5 +1,5 @@
 import {fadeIn, fadeOut } from './fade';
-import {isEmail} from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail';
 
 export type fieldType = 'text' | 'select' | 'checkbox';
 
@@ -301,14 +301,25 @@ export class Validator {
 
 export class RKFormValidator {
     private _validators: Validator[] = [];
-    private _errors: string[];
+    private _errors: string[] = [];
 
     addValidator(validator: Validator) {
         this._validators.push(validator);
     }
 
+    public setErrors(errors) {
+        this._errors = errors;
+    }
+
     public get errors() {
         return this._errors;
+    }
+    public hasErrors(): boolean {
+        if (this._validators.some(validator => validator.hasError())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     checkAll() {
