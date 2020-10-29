@@ -322,8 +322,21 @@ export class RKFormValidator {
         }
     }
 
+    public showErrorsOnPage(el: IElement) {
+        const domEl = document.getElementById(el.id);
+        if (this._errors.length) {
+            const errList = this._errors.map(err => `<li>${err}</li>`).join('');
+            domEl.innerHTML = '<ul>' + errList + '</ul>';
+        }
+    }
+
     checkAll() {
-        this._validators.forEach(validator => validator.checkForErrors());
+        this._validators.forEach(validator => {
+            validator.checkForErrors();
+            if (validator.errors.length) {
+                this._errors = [...this._errors, validator.errors[0]];
+            }
+        });
     }
 
     public getValidator(id: string) {
